@@ -1,15 +1,20 @@
 <?php
-
+//Front Controller
+//Show errors
 ini_set('display_errors', 1);
 ini_set('display_starup_error', 1);
 error_reporting(E_ALL);
 
+//Load de autoload with all the classes
 require_once '../vendor/autoload.php';
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Capsule\Manager as Capsule; //Eloquent
+use Aura\Router\RouterContainer; //Router
 
+//Create a capsule for ELOQUENT
 $capsule = new Capsule;
 
+//Set up database connection stuffs
 $capsule->addConnection([
     'driver'    => 'mysql',
     'host'      => 'localhost',
@@ -26,6 +31,7 @@ $capsule->setAsGlobal();
 // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
 $capsule->bootEloquent();
 
+//Object request from Zend Diactoros
 $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
     $_SERVER,
     $_GET,
@@ -34,6 +40,27 @@ $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
     $_FILES
 );
 
-var_dump($request->getUri()->getPath());
+//Create route container
+$routerContainer = new RouterContainer();
+
+//Create a map of routes
+$map = $routerContainer->getMap();
+$baseRoute = '/intro-php-platzi/portfolio';
+//Create a new route
+$map->get('index', $baseRoute.'/', '../index.php');
+$map->get('addJob', $baseRoute.'/add/job', '../addJob.php');
+
+//Get the matcher from aura
+$matcher = $routerContainer->getMatcher();
+//Search the route and file
+$route = $matcher->match($request);
+//Verify if the route exists
+if(!$route) {
+    echo "Route undefined";
+} else {
+    //Call the file defined in handler method
+    require $route->handler;
+}
+
 
 

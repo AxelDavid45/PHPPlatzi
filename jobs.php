@@ -4,10 +4,7 @@ use App\Models\{Job, Project};
 
 $jobs = Job::all();
 
-  $project1 = new Project('Project 1', 'Description 1');
-$projects = [
-    $project1
-];
+
   
 function printElement($job) {
     // if($job->visible == false) {

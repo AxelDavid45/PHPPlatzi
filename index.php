@@ -2,7 +2,7 @@
 use App\Models\Job;
 require_once('jobs.php');
 
-$name = 'Hector Benitez';
+$name = 'Axel Espinosa';
 $limitMonths = 2000;
 ?>
 
@@ -32,10 +32,10 @@ $limitMonths = 2000;
         <h1><?php echo $name; ?></h1>
         <h2>PHP Developer</h2>
         <ul>
-          <li>Mail: hector@mail.com</li>
+          <li>Mail: axeldavid45@gmail.com</li>
           <li>Phone: 1234567890</li>
           <li>LinkedIn: https://linkedin.com</li>
-          <li>Twitter: @hectorbenitez</li>
+          <li>Twitter: @E_Axel45</li>
         </ul>
       </div>
     </div>
@@ -69,13 +69,6 @@ $limitMonths = 2000;
         </div>
         <div>
             <h3 class="border-bottom-gray">Projects</h3>
-            <ul>
-            <?php
-            for($idx = 0;$idx < count($projects); $idx++) {
-              printElement($projects[$idx]);
-            }
-            ?>
-          </ul>
 
             <div class="project">
                 <h5>Project X</h5>

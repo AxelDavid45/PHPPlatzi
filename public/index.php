@@ -47,20 +47,52 @@ $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
 $baseRoute = '/intro-php-platzi/portfolio';
 //Create a new route
-$map->get('index', $baseRoute.'/', '../index.php');
-$map->get('addJob', $baseRoute.'/add/job', '../addJob.php');
+$map->get('index', $baseRoute.'/', [
+    'controller' => 'App\Controllers\IndexController',
+    'method' => 'indexAction'
+]);
+
+$map->get('addJob', $baseRoute.'/add/job', [
+    'controller' => 'App\Controllers\JobsController',
+    'method' => 'getAddJobAction'
+]);
 
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file
 $route = $matcher->match($request);
+
 //Verify if the route exists
 if(!$route) {
     echo "Route undefined";
 } else {
-    //Call the file defined in handler method
-    require $route->handler;
+    //Save data from handler
+    $handlerData = $route->handler;
+    $controllerName = $handlerData['controller'];
+    $method = $handlerData['method'];
+    //Create a new instance of the controller
+    $controller = new $controllerName;
+    //Call the method from controller
+    $controller->$method();
 }
 
+//Temporally  code
+function printElement($job) {
+    // if($job->visible == false) {
+    //   return;
+    // }
+
+    echo '<li class="work-position">';
+    echo '<h5>' . $job->title . '</h5>';
+    echo '<p>' . $job->description . '</p>';
+    echo '<p>' . $job->getDurationAsString() . '</p>';
+    echo '<strong>Achievements:</strong>';
+    echo '<ul>';
+    echo '<li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>';
+    echo '<li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>';
+    echo '<li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>';
+    echo '</ul>';
+    echo '</li>';
+}
 
 

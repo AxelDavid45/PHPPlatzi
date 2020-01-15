@@ -10,8 +10,8 @@ class IndexController
         //Assign name for portfolio
         $name = 'Axel Espinosa';
         $limitMonths = 2000;
-        //Call the view
-        require_once '../view/index.php';
+        //Call the views
+        require_once '../views/index.php';
     }
 
 }

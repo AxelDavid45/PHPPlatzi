@@ -4,7 +4,7 @@
 namespace App\Controllers;
 use App\Models\Job;
 
-class JobsController
+class JobsController extends BaseController
 {
     public function getAddJobAction($request) {
         //Verify if isn't empty
@@ -18,7 +18,7 @@ class JobsController
             $job->save();
         }
 
-        require_once '../view/addJob.php';
+        echo $this->renderHTML('addJob.twig');
 
     }
 }

@@ -4,7 +4,7 @@
 ini_set('display_errors', 1);
 ini_set('display_starup_error', 1);
 error_reporting(E_ALL);
-
+define('base_url', '/intro-php-platzi/portfolio');
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
 
@@ -57,6 +57,10 @@ $map->get('addJob', $baseRoute.'/add/job', [
     'method' => 'getAddJobAction'
 ]);
 
+$map->post('saveJob', $baseRoute.'/add/job', [
+    'controller' => 'App\Controllers\JobsController',
+    'method' => 'getAddJobAction'
+]);
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file
@@ -73,7 +77,7 @@ if(!$route) {
     //Create a new instance of the controller
     $controller = new $controllerName;
     //Call the method from controller
-    $controller->$method();
+    $controller->$method($request);
 }
 
 //Temporally  code

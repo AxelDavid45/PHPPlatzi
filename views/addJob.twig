@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block content %}
+    {% if message == 'Saved' %}
+        <div class="alert alert-success mt-5">
+            Saved
+        </div>
+    {% elseif message == 'Error' %}
+        <div class="alert alert-danger mt-5">
+            {{ message }}
+        </div>
+    {% endif %}
+
     <h1>Add Job</h1>
     <form action="{{ constant('base_url') }}/add/job" method="post">
         <label for="">Title:</label>

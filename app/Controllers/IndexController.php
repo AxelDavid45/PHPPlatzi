@@ -2,7 +2,7 @@
 namespace App\Controllers;
 use App\Models\{Job, Project};
 
-class IndexController
+class IndexController extends BaseController
 {
     public function indexAction() {
         //Get all jobs from DB
@@ -11,7 +11,7 @@ class IndexController
         $name = 'Axel Espinosa';
         $limitMonths = 2000;
         //Call the views
-        require_once '../views/index.php';
+        echo $this->renderHTML('index.twig', ['name' => $name, 'limitMonths' => $limitMonths]);
     }
 
 }

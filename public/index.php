@@ -4,7 +4,7 @@
 ini_set('display_errors', 1);
 ini_set('display_starup_error', 1);
 error_reporting(E_ALL);
-define('base_url', '/intro-php-platzi/portfolio');
+define('base_url', '/introphp/portfolio');
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
 
@@ -45,22 +45,23 @@ $routerContainer = new RouterContainer();
 
 //Create a map of routes
 $map = $routerContainer->getMap();
-$baseRoute = '/intro-php-platzi/portfolio';
+
 //Create a new route
-$map->get('index', $baseRoute.'/', [
+$map->get('index', base_url.'/', [
     'controller' => 'App\Controllers\IndexController',
     'method' => 'indexAction'
 ]);
 
-$map->get('addJob', $baseRoute.'/add/job', [
+$map->get('addJob', base_url.'/add/job', [
     'controller' => 'App\Controllers\JobsController',
     'method' => 'getAddJobAction'
 ]);
 
-$map->post('saveJob', $baseRoute.'/add/job', [
+$map->post('saveJob', base_url.'/add/job', [
     'controller' => 'App\Controllers\JobsController',
     'method' => 'getAddJobAction'
 ]);
+
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file
@@ -78,25 +79,6 @@ if(!$route) {
     $controller = new $controllerName;
     //Call the method from controller
     $controller->$method($request);
-}
-
-//Temporally  code
-function printElement($job) {
-    // if($job->visible == false) {
-    //   return;
-    // }
-
-    echo '<li class="work-position">';
-    echo '<h5>' . $job->title . '</h5>';
-    echo '<p>' . $job->description . '</p>';
-    echo '<p>' . $job->getDurationAsString() . '</p>';
-    echo '<strong>Achievements:</strong>';
-    echo '<ul>';
-    echo '<li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>';
-    echo '<li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>';
-    echo '<li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>';
-    echo '</ul>';
-    echo '</li>';
 }
 
 

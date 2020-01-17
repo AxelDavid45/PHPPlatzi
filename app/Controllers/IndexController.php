@@ -11,7 +11,7 @@ class IndexController extends BaseController
         $name = 'Axel Espinosa';
         $limitMonths = 2000;
         //Call the views
-        echo $this->renderHTML('index.twig', [
+        return $this->renderHTML('index.twig', [
             'name' => $name,
             'jobs' => $jobs
         ]);

@@ -78,7 +78,10 @@ if(!$route) {
     //Create a new instance of the controller
     $controller = new $controllerName;
     //Call the method from controller
-    $controller->$method($request);
+    $response = $controller->$method($request);
+
+    //Show response html
+    echo $response->getBody();
 }
 
 

@@ -3,6 +3,7 @@
 
 namespace App\Controllers;
 use App\Models\Job;
+use Respect\Validation as v;
 
 class JobsController extends BaseController
 {
@@ -10,15 +11,21 @@ class JobsController extends BaseController
         //Verify if isn't empty
         if ($request->getMethod() == 'POST') {
             $postData = $request->getParsedBody();
-            $job = new Job(); //Instance from Job Model
+            $jobValidator = v::key('title', v::stringType()->notEmpty())
+                ->key('description', v::stringType()->notEmpty());
+
+            var_dump($jobValidator->validate($postData));
+
+            /*$job = new Job(); //Instance from Job Model
             //Fill data
             $job->title = $postData['title'];
             $job->description = $postData['description'];
             //Save it in database
-            $job->save();
+            $job->save();*/
         }
 
-        echo $this->renderHTML('addJob.twig');
+        //Return a render
+        return $this->renderHTML('addJob.twig');
 
     }
 }

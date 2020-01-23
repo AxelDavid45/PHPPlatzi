@@ -9,18 +9,20 @@
         <div class="alert alert-success mt-5">
             Saved
         </div>
-    {% elseif message == 'Error' %}
+    {% else  %}
         <div class="alert alert-danger mt-5">
             {{ message }}
         </div>
     {% endif %}
 
     <h1>Add Job</h1>
-    <form action="{{ constant('base_url') }}/add/job" method="post">
+    <form action="{{ constant('base_url') }}/add/job" method="post" enctype="multipart/form-data">
         <label for="">Title:</label>
         <input type="text" name="title"><br>
         <label for="">Description:</label>
         <input type="text" name="description"><br>
+        <input type="file" name="logo">
+        <br>
         <button type="submit">Save</button>
     </form>
 {% endblock %}

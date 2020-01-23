@@ -18,25 +18,38 @@ class JobsController extends BaseController
             try {
                 //Try to validate
                 $jobValidator->assert($postData);
+                //Retrieve uploaded files
+                $files = $request->getUploadedFiles();
+                //Save logo
+                $logo = $files['logo'];
+                //Do not need to have error
+                if ($logo->getError() == UPLOAD_ERR_OK) {
+                    //Generate a unique filename
+                    $fileName = time().$logo->getClientFileName();
+                    //Save in public/uploads
+                    $logo->moveTo("uploads/$fileName");
 
-                $job = new Job(); //Instance from Job Model
+                }
+
+
+                /*$job = new Job(); //Instance from Job Model
                 //Fill data
                 $job->title = $postData['title'];
                 $job->description = $postData['description'];
                 //Save it in database
-                $job->save();
+                $job->save();*/
 
                 $responseMessage = 'Saved';
 
             } catch (\Exception $e) {
-                $responseMessage = 'Error';
+                $responseMessage = $e->getMessage();
             }
 
         }
 
         //Return a render
         return $this->renderHTML('addJob.twig', [
-            'message' => $responseMessage
+            'message' => $responseMessage,
         ]);
 
     }

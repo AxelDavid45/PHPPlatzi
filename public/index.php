@@ -72,6 +72,16 @@ $map->post('saveUser', base_url.'/user/store', [
     'method' => 'store'
 ]);
 
+$map->get('login', base_url.'/auth', [
+    'controller' => 'App\Controllers\AuthController',
+    'method' => 'getLogin'
+]);
+
+$map->post('auth', base_url.'/auth/login', [
+    'controller' => 'App\Controllers\AuthController',
+    'method' => 'postLogin'
+]);
+
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file

@@ -39,8 +39,6 @@ class UserController extends BaseController
             }
 
         }
-        var_dump($message);
-        die();
 
         return $this->renderHTML('createUser.twig', [
             'message' => $message

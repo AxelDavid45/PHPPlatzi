@@ -7,6 +7,8 @@ error_reporting(E_ALL);
 define('base_url', '/introphp/portfolio');
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
+//Initialize sessions
+session_start();
 
 use Illuminate\Database\Capsule\Manager as Capsule; //Eloquent
 use Aura\Router\RouterContainer; //Router
@@ -54,17 +56,20 @@ $map->get('index', base_url.'/', [
 
 $map->get('addJob', base_url.'/add/job', [
     'controller' => 'App\Controllers\JobsController',
-    'method' => 'getAddJobAction'
+    'method' => 'getAddJobAction',
+    'auth' => true
 ]);
 
 $map->post('saveJob', base_url.'/add/job', [
     'controller' => 'App\Controllers\JobsController',
-    'method' => 'getAddJobAction'
+    'method' => 'getAddJobAction',
+    'auth' => true
 ]);
 
 $map->get('createUser', base_url.'/user/create', [
     'controller' => 'App\Controllers\UserController',
-    'method' => 'create'
+    'method' => 'create',
+    'auth' => true
 ]);
 
 $map->post('saveUser', base_url.'/user/store', [
@@ -82,6 +87,17 @@ $map->post('auth', base_url.'/auth/login', [
     'method' => 'postLogin'
 ]);
 
+$map->get('admin', base_url.'/admin', [
+    'controller' => 'App\Controllers\AuthController',
+    'method' => 'getDashboard',
+    'auth' => true
+]);
+
+$map->get('logout', base_url.'/logout', [
+    'controller' => 'App\Controllers\AuthController',
+    'method' => 'logout'
+]);
+
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file
@@ -95,10 +111,23 @@ if(!$route) {
     $handlerData = $route->handler;
     $controllerName = $handlerData['controller'];
     $method = $handlerData['method'];
-    //Create a new instance of the controller
-    $controller = new $controllerName;
-    //Call the method from controller
-    $response = $controller->$method($request);
+    $needsAuth = $handlerData['auth'] ?? false;
+
+
+
+    if($needsAuth && (!isset($_SESSION['userId']) || !$_SESSION['userId'])) {
+        //Create a new instance of the controller
+        $controller = new \App\Controllers\AuthController();
+        //Call the method from controller
+        $response = $controller->getLogin($request);
+    } else {
+        //Create a new instance of the controller
+        $controller = new $controllerName;
+        //Call the method from controller
+        $response = $controller->$method($request);
+    }
+
+
 
     //Print headers for redirect responses
     foreach ($response->getHeaders() as $name => $values) {
@@ -108,10 +137,10 @@ if(!$route) {
     }
 
     http_response_code($response->getStatusCode());
-    var_dump($response);
 
     //Show response html
     echo $response->getBody();
+
 }
 
 

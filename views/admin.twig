@@ -1,0 +1,17 @@
+{% extends "layout.twig" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <ul>
+        <li><a class="btn btn-primary" href="{{ constant('base_url') }}/add/job">Add Job</a></li>
+        <li><a class="btn btn-primary" href="{{ constant('base_url') }}/user/create">Create
+                User</a></li>
+    </ul>
+
+    <br><br>
+    <a href="{{ constant('base_url') }}/logout" class="btn btn-danger">Logout</a>
+{% endblock %}

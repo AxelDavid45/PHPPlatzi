@@ -2,12 +2,14 @@
 
 
 namespace App\Controllers;
+
 use App\Models\Job;
 use Respect\Validation\Validator as v;
 
 class JobsController extends BaseController
 {
-    public function getAddJobAction($request) {
+    public function getAddJobAction($request)
+    {
         $responseMessage = null;
         //Verify if isn't empty
         if ($request->getMethod() == 'POST') {
@@ -25,21 +27,23 @@ class JobsController extends BaseController
                 //Do not need to have error
                 if ($logo->getError() == UPLOAD_ERR_OK) {
                     //Generate a unique filename
-                    $fileName = time().$logo->getClientFileName();
+                    $fileName = time() . $logo->getClientFileName();
                     //Save in public/uploads
                     $logo->moveTo("uploads/$fileName");
 
+                    //Save a new object in database
+                    $job = new Job(); //Instance from Job Model
+                    //Fill data
+                    $job->title = $postData['title'];
+                    $job->description = $postData['description'];
+                    $job->image = $fileName;
+                    //Save it in database
+                    $job->save();
+
+                    $responseMessage = 'Saved';
+                } else {
+                    $responseMessage = $logo->getError();
                 }
-
-
-                /*$job = new Job(); //Instance from Job Model
-                //Fill data
-                $job->title = $postData['title'];
-                $job->description = $postData['description'];
-                //Save it in database
-                $job->save();*/
-
-                $responseMessage = 'Saved';
 
             } catch (\Exception $e) {
                 $responseMessage = $e->getMessage();

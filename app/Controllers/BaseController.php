@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Controllers;
+use Zend\Diactoros\Response;
 use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Diactoros\Response\RedirectResponse;
 
 class BaseController
 {

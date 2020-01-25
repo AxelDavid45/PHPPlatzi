@@ -62,6 +62,16 @@ $map->post('saveJob', base_url.'/add/job', [
     'method' => 'getAddJobAction'
 ]);
 
+$map->get('createUser', base_url.'/user/create', [
+    'controller' => 'App\Controllers\UserController',
+    'method' => 'create'
+]);
+
+$map->post('saveUser', base_url.'/user/store', [
+    'controller' => 'App\Controllers\UserController',
+    'method' => 'store'
+]);
+
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file

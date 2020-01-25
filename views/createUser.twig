@@ -1,0 +1,26 @@
+{% extends "layout.twig" %}
+
+{% block title %}
+    Create user
+{% endblock %}
+
+{% block content %}
+    {% if message %}
+        <div class="alert alert-success mt-5">
+            Saved
+        </div>
+    {% else  %}
+        <div class="alert alert-warning mt-5">
+            {{ message }}
+        </div>
+    {% endif %}
+    <h1>Create user</h1>
+    <form action="{{ constant('base_url') }}/user/store" method="post" >
+        <label for="">Email:</label>
+        <input type="email" name="email"><br>
+        <label for="">Password:</label>
+        <input type="password" name="password"><br>
+        <br>
+        <button type="submit">Create</button>
+    </form>
+{% endblock %}

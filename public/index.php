@@ -9,6 +9,9 @@ define('base_url', '/introphp/portfolio');
 require_once '../vendor/autoload.php';
 //Initialize sessions
 session_start();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
+$dotenv->load();
+
 
 use Illuminate\Database\Capsule\Manager as Capsule; //Eloquent
 use Aura\Router\RouterContainer; //Router
@@ -19,10 +22,10 @@ $capsule = new Capsule;
 //Set up database connection stuffs
 $capsule->addConnection([
     'driver'    => 'mysql',
-    'host'      => 'localhost',
-    'database'  => 'cursophp',
-    'username'  => 'root',
-    'password'  => '',
+    'host'      => getenv('DB_HOST'),
+    'database'  => getenv('DB_NAME'),
+    'username'  => getenv('DB_USER'),
+    'password'  => getenv('DB_PASS'),
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',

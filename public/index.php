@@ -100,6 +100,16 @@ if(!$route) {
     //Call the method from controller
     $response = $controller->$method($request);
 
+    //Print headers for redirect responses
+    foreach ($response->getHeaders() as $name => $values) {
+        foreach ($values as $value) {
+            header(sprintf('%s: %s', $name, $value), false);
+        }
+    }
+
+    http_response_code($response->getStatusCode());
+    var_dump($response);
+
     //Show response html
     echo $response->getBody();
 }

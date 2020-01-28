@@ -28,7 +28,7 @@ class AuthController extends BaseController
                 $verifyPassword = password_verify($formData['password'], $user->password);
                 if ($verifyPassword) {
                     $_SESSION['userId'] = true;
-                    return new RedirectResponse(base_url.'/admin');
+                    return new RedirectResponse('/admin');
                 } else {
                     $message = 'Bad Credentials';
                 }
@@ -49,7 +49,7 @@ class AuthController extends BaseController
 
     public function logout() {
         session_destroy();
-        return new RedirectResponse(base_url.'/auth');
+        return new RedirectResponse('/auth');
     }
 
 }

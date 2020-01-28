@@ -1,0 +1,26 @@
+ip: 192.168.10.10
+memory: 2048
+cpus: 2
+provider: virtualbox
+authorize: ~/.ssh/id_rsa.pub
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: 'C:\Users\axele\php-projects\portfolio'
+        to: /home/vagrant/code
+sites:
+    -
+        map: cursophp.test
+        to: /home/vagrant/code/public
+databases:
+    - cursophp
+features:
+    -
+        mariadb: false
+    -
+        ohmyzsh: true
+    -
+        webdriver: false
+name: cursophp
+hostname: cursophp

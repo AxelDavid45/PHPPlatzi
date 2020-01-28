@@ -4,7 +4,6 @@
 ini_set('display_errors', 1);
 ini_set('display_starup_error', 1);
 error_reporting(E_ALL);
-define('base_url', '/introphp/portfolio');
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
 //Initialize sessions
@@ -52,51 +51,51 @@ $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
 
 //Create a new route
-$map->get('index', base_url.'/', [
+$map->get('index', '/', [
     'controller' => 'App\Controllers\IndexController',
     'method' => 'indexAction'
 ]);
 
-$map->get('addJob', base_url.'/add/job', [
+$map->get('addJob', '/add/job', [
     'controller' => 'App\Controllers\JobsController',
     'method' => 'getAddJobAction',
     'auth' => true
 ]);
 
-$map->post('saveJob', base_url.'/add/job', [
+$map->post('saveJob', '/add/job', [
     'controller' => 'App\Controllers\JobsController',
     'method' => 'getAddJobAction',
     'auth' => true
 ]);
 
-$map->get('createUser', base_url.'/user/create', [
+$map->get('createUser', '/user/create', [
     'controller' => 'App\Controllers\UserController',
     'method' => 'create',
     'auth' => true
 ]);
 
-$map->post('saveUser', base_url.'/user/store', [
+$map->post('saveUser', '/user/store', [
     'controller' => 'App\Controllers\UserController',
     'method' => 'store'
 ]);
 
-$map->get('login', base_url.'/auth', [
+$map->get('login', '/auth', [
     'controller' => 'App\Controllers\AuthController',
     'method' => 'getLogin'
 ]);
 
-$map->post('auth', base_url.'/auth/login', [
+$map->post('auth', '/auth/login', [
     'controller' => 'App\Controllers\AuthController',
     'method' => 'postLogin'
 ]);
 
-$map->get('admin', base_url.'/admin', [
+$map->get('admin', '/admin', [
     'controller' => 'App\Controllers\AuthController',
     'method' => 'getDashboard',
     'auth' => true
 ]);
 
-$map->get('logout', base_url.'/logout', [
+$map->get('logout', '/logout', [
     'controller' => 'App\Controllers\AuthController',
     'method' => 'logout'
 ]);

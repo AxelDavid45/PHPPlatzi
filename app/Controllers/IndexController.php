@@ -4,12 +4,19 @@ use App\Models\{Job, Project};
 
 class IndexController extends BaseController
 {
-    public function indexAction() {
+    public function indexAction()
+    {
         //Get all jobs from DB
         $jobs = Job::all();
         //Assign name for portfolio
         $name = 'Axel Espinosa';
-        $limitMonths = 2000;
+        //Filter jobs by months
+        $limitMonths = 15;
+        $jobFilter = function ($job) use ($limitMonths) {
+            return $job['months'] >= $limitMonths;
+        };
+
+        $jobs = array_filter($jobs->toArray(), $jobFilter);
         //Call the views
         return $this->renderHTML('index.twig', [
             'name' => $name,

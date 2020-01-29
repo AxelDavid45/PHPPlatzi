@@ -11,7 +11,6 @@ class BaseController
 
     /*
      * Roll out all the setting for twig
-     *
      */
     public function __construct() {
         //Create the loader where the views are

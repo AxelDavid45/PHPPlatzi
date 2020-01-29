@@ -11,8 +11,8 @@ class IndexController extends BaseController
         //Assign name for portfolio
         $name = 'Axel Espinosa';
         //Filter jobs by months
-        $limitMonths = 15;
-        $jobFilter = function ($job) use ($limitMonths) {
+        $limitMonths = 0;
+        $jobFilter = function (array $job) use ($limitMonths) {
             return $job['months'] >= $limitMonths;
         };
 

@@ -144,5 +144,3 @@ if(!$route) {
     echo $response->getBody();
 
 }
-
-

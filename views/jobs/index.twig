@@ -1,0 +1,25 @@
+{% extends "layout.twig" %}
+
+{% block title %}
+    Jobs
+{% endblock %}
+{% block content %}
+    <h1>Manage Jobs</h1>
+    <div class="row">
+        <a href="/admin">Back to admin dashboard</a>
+        <table class="table">
+            <tr>
+                <th>Job</th>
+                <th>Action</th>
+            </tr>
+            {% for job in jobs %}
+                <tr>
+                    <td>{{ job.title }}</td>
+                    <td><a href="jobs/delete?id={{ job.id }}">Delete</a></td>
+
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}

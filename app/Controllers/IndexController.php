@@ -11,12 +11,12 @@ class IndexController extends BaseController
         //Assign name for portfolio
         $name = 'Axel Espinosa';
         //Filter jobs by months
-        $limitMonths = 0;
+       /* $limitMonths = 0;
         $jobFilter = function (array $job) use ($limitMonths) {
             return $job['months'] >= $limitMonths;
-        };
+        };*/
 
-        $jobs = array_filter($jobs->toArray(), $jobFilter);
+//        $jobs = array_filter($jobs->toArray(), $jobFilter);
         //Call the views
         return $this->renderHTML('index.twig', [
             'name' => $name,

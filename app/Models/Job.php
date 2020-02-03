@@ -3,11 +3,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasDefaultImage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model {
-    protected $table = 'jobs';
-
     use HasDefaultImage;
+    use SoftDeletes;
+
+    protected $table = 'jobs';
 
     public function getDurationAsString() {
         $years = floor($this->months / 12);

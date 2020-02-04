@@ -6,12 +6,21 @@ ini_set('display_starup_error', 1);
 error_reporting(E_ALL);
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
+
 use Illuminate\Database\Capsule\Manager as Capsule; //Eloquent
-use Aura\Router\RouterContainer; //Router
+//Router
+use Aura\Router\RouterContainer;
+// Libraries needs for middleware
+use Laminas\Diactoros\Response;
+use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use WoohooLabs\Harmony\Harmony;
+use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
+use WoohooLabs\Harmony\Middleware\LaminasEmitterMiddleware;
+
 //Initialize sessions
 session_start();
 //Instance the dotenv
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 //Create the container for dependency injection
 $container = new DI\Container();
@@ -21,14 +30,14 @@ $capsule = new Capsule;
 
 //Set up database connection stuffs
 $capsule->addConnection([
-    'driver'    => 'mysql',
-    'host'      => getenv('DB_HOST'),
-    'database'  => getenv('DB_NAME'),
-    'username'  => getenv('DB_USER'),
-    'password'  => getenv('DB_PASS'),
-    'charset'   => 'utf8',
+    'driver' => 'mysql',
+    'host' => getenv('DB_HOST'),
+    'database' => getenv('DB_NAME'),
+    'username' => getenv('DB_USER'),
+    'password' => getenv('DB_PASS'),
+    'charset' => 'utf8',
     'collation' => 'utf8_unicode_ci',
-    'prefix'    => '',
+    'prefix' => '',
 ]);
 
 // Make this Capsule instance available globally via static methods... (optional)
@@ -37,7 +46,7 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 //Object request from Zend Diactoros
-$request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
+$request = Laminas\Diactoros\ServerRequestFactory::fromGlobals(
     $_SERVER,
     $_GET,
     $_POST,
@@ -53,64 +62,58 @@ $map = $routerContainer->getMap();
 
 //Create a new route
 $map->get('index', '/', [
-    'controller' => 'App\Controllers\IndexController',
-    'method' => 'indexAction'
+    'App\Controllers\IndexController',
+    'indexAction'
 ]);
 
 $map->get('Jobs', '/jobs', [
-    'controller' => 'App\Controllers\JobsController',
-    'method' => 'indexAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'indexAction'
 ]);
 
 $map->get('JobDelete', '/jobs/delete', [
-    'controller' => 'App\Controllers\JobsController',
-    'method' => 'deleteJob',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'deleteJob'
 ]);
 
 $map->get('addJob', '/add/job', [
-    'controller' => 'App\Controllers\JobsController',
-    'method' => 'getAddJobAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'getAddJobAction'
 ]);
 
 $map->post('saveJob', '/add/job', [
-    'controller' => 'App\Controllers\JobsController',
-    'method' => 'getAddJobAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'getAddJobAction'
 ]);
 
 $map->get('createUser', '/user/create', [
-    'controller' => 'App\Controllers\UserController',
-    'method' => 'create',
-    'auth' => true
+    'App\Controllers\UserController',
+    'create'
 ]);
 
 $map->post('saveUser', '/user/store', [
-    'controller' => 'App\Controllers\UserController',
-    'method' => 'store'
+    'App\Controllers\UserController',
+    'store'
 ]);
 
 $map->get('login', '/auth', [
-    'controller' => 'App\Controllers\AuthController',
-    'method' => 'getLogin'
+    'App\Controllers\AuthController',
+    'getLogin'
 ]);
 
 $map->post('auth', '/auth/login', [
-    'controller' => 'App\Controllers\AuthController',
-    'method' => 'postLogin'
+    'App\Controllers\AuthController',
+    'postLogin'
 ]);
 
 $map->get('admin', '/admin', [
-    'controller' => 'App\Controllers\AuthController',
-    'method' => 'getDashboard',
-    'auth' => true
+    'App\Controllers\AuthController',
+    'getDashboard'
 ]);
 
 $map->get('logout', '/logout', [
-    'controller' => 'App\Controllers\AuthController',
-    'method' => 'logout'
+    'App\Controllers\AuthController',
+    'logout'
 ]);
 
 //Get the matcher from aura
@@ -119,39 +122,16 @@ $matcher = $routerContainer->getMatcher();
 $route = $matcher->match($request);
 
 //Verify if the route exists
-if(!$route) {
+if (!$route) {
     echo "Route undefined";
 } else {
-    //Save data from handler
-    $handlerData = $route->handler;
-    $controllerName = $handlerData['controller'];
-    $method = $handlerData['method'];
-    $needsAuth = $handlerData['auth'] ?? false;
 
-
-
-    if($needsAuth && (!isset($_SESSION['userId']) || !$_SESSION['userId'])) {
-        //Create a new instance of the controller
-        $controller = new \App\Controllers\AuthController();
-        //Call the method from controller
-        $response = $controller->getLogin($request);
-    } else {
-        //Create a new instance of the controller
-        $controller = $container->get($controllerName);
-        //Call the method from controller
-        $response = $controller->$method($request);
-    }
-
-    //Print headers for redirect responses
-    foreach ($response->getHeaders() as $name => $values) {
-        foreach ($values as $value) {
-            header(sprintf('%s: %s', $name, $value), false);
-        }
-    }
-
-    http_response_code($response->getStatusCode());
-
-    //Show response html
-    echo $response->getBody();
-
+    //Implementation of harmony middleware, dispatcher
+    $harmony = new Harmony($request, new Response());
+    $harmony
+        ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+        ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
+        ->addMiddleware(new \App\Middlewares\AuthMiddleware())
+        ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'))
+        ->run();
 }

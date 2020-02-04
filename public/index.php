@@ -6,14 +6,15 @@ ini_set('display_starup_error', 1);
 error_reporting(E_ALL);
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
-//Initialize sessions
-session_start();
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
-$dotenv->load();
-
-
 use Illuminate\Database\Capsule\Manager as Capsule; //Eloquent
 use Aura\Router\RouterContainer; //Router
+//Initialize sessions
+session_start();
+//Instance the dotenv
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
+$dotenv->load();
+//Create the container for dependency injection
+$container = new DI\Container();
 
 //Create a capsule for ELOQUENT
 $capsule = new Capsule;
@@ -136,12 +137,10 @@ if(!$route) {
         $response = $controller->getLogin($request);
     } else {
         //Create a new instance of the controller
-        $controller = new $controllerName;
+        $controller = $container->get($controllerName);
         //Call the method from controller
         $response = $controller->$method($request);
     }
-
-
 
     //Print headers for redirect responses
     foreach ($response->getHeaders() as $name => $values) {

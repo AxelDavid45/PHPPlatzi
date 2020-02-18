@@ -126,12 +126,18 @@ if (!$route) {
     echo "Route undefined";
 } else {
 
-    //Implementation of harmony middleware, dispatcher
-    $harmony = new Harmony($request, new Response());
-    $harmony
-        ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
-        ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
-        ->addMiddleware(new \App\Middlewares\AuthMiddleware())
-        ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'))
-        ->run();
+    try {
+        //Implementation of harmony middleware, dispatcher
+        $harmony = new Harmony($request, new Response());
+        $harmony
+            ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+            ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
+            ->addMiddleware(new \App\Middlewares\AuthMiddleware())
+            ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'))
+            ->run();
+
+    } catch(Exception $e) {
+        echo "Error";
+    }
+
 }

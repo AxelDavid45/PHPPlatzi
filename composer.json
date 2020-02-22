@@ -14,7 +14,9 @@
         "woohoolabs/harmony": "^7.1",
         "laminas/laminas-diactoros": "^2.2",
         "laminas/laminas-httphandlerrunner": "^1.1",
-        "middlewares/aura-router": "^2.0"
+        "middlewares/aura-router": "^2.0",
+        "filp/whoops": "^2.7",
+        "franzl/whoops-middleware": "^1.2"
     },
     "require-dev": {
         "laravel/homestead": "^10.1"

@@ -131,16 +131,17 @@ if (!$route) {
         $harmony = new Harmony($request, new Response());
         $harmony
             ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+            ->addMiddleware(new \Franzl\Middleware\Whoops\WhoopsMiddleware)
             ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
             ->addMiddleware(new \App\Middlewares\AuthMiddleware())
             ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'))
             ->run();
 
-    } catch(Exception $e) {
-        //Emitter use the head() function of php to emit responses HTTP
-        $emitter = new SapiEmitter();
-        //Send a new empty response with code 400 because the request is not accepted
-        $emitter->emit(new Response\EmptyResponse(400));
+//    } catch(Exception $e) {
+//        //Emitter use the head() function of php to emit responses HTTP
+//        $emitter = new SapiEmitter();
+//        //Send a new empty response with code 400 because the request is not accepted
+//        $emitter->emit(new Response\EmptyResponse(400));
     } catch(Error $e) {
         //Emitter use the head() function of php to emit responses HTTP
         $emitter = new SapiEmitter();

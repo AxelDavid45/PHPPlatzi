@@ -1,5 +1,5 @@
 .env
-.vagrant/
+.vagrant/*
 vendor/
 ._composer.phar
 .idea/

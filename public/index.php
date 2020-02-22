@@ -137,7 +137,15 @@ if (!$route) {
             ->run();
 
     } catch(Exception $e) {
-        echo "Error";
+        //Emitter use the head() function of php to emit responses HTTP
+        $emitter = new SapiEmitter();
+        //Send a new empty response with code 400 because the request is not accepted
+        $emitter->emit(new Response\EmptyResponse(400));
+    } catch(Error $e) {
+        //Emitter use the head() function of php to emit responses HTTP
+        $emitter = new SapiEmitter();
+        //Send a new empty response with code 500 because is a server error
+        $emitter->emit(new Response\EmptyResponse(500));
     }
 
 }

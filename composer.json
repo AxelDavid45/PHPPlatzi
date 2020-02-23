@@ -16,7 +16,8 @@
         "laminas/laminas-httphandlerrunner": "^1.1",
         "middlewares/aura-router": "^2.0",
         "filp/whoops": "^2.7",
-        "franzl/whoops-middleware": "^1.2"
+        "franzl/whoops-middleware": "^1.2",
+        "monolog/monolog": "^2.0"
     },
     "require-dev": {
         "laravel/homestead": "^10.1"

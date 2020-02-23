@@ -16,12 +16,21 @@ use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use WoohooLabs\Harmony\Harmony;
 use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
 use WoohooLabs\Harmony\Middleware\LaminasEmitterMiddleware;
+//Logger
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 //Initialize sessions
 session_start();
 //Instance the dotenv
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
+
+//Creating instances for log
+// create a log channel
+$log = new Logger('app');
+$log->pushHandler(new StreamHandler(__DIR__.'/../logs/app.log', Logger::WARNING));
+
 //Create the container for dependency injection
 $container = new DI\Container();
 

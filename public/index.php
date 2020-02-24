@@ -1,9 +1,5 @@
 <?php
 //Front Controller
-//Show errors
-ini_set('display_errors', 1);
-ini_set('display_starup_error', 1);
-error_reporting(E_ALL);
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
 
@@ -26,10 +22,18 @@ session_start();
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
+//Debug options
+if (getenv('DEBUG') == 'true') {
+    //Show errors
+    ini_set('display_errors', 1);
+    ini_set('display_starup_error', 1);
+    error_reporting(E_ALL);
+}
+
 //Creating instances for log
 // create a log channel
 $log = new Logger('app');
-$log->pushHandler(new StreamHandler(__DIR__.'/../logs/app.log', Logger::WARNING));
+$log->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::WARNING));
 
 //Create the container for dependency injection
 $container = new DI\Container();
@@ -138,20 +142,22 @@ if (!$route) {
     try {
         //Implementation of harmony middleware, dispatcher
         $harmony = new Harmony($request, new Response());
-        $harmony
-            ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
-            ->addMiddleware(new \Franzl\Middleware\Whoops\WhoopsMiddleware)
-            ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
+        $harmony->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()));
+        if (getenv('DEBUG') =='true') {
+            $harmony->addMiddleware(new \Franzl\Middleware\Whoops\WhoopsMiddleware);
+        }
+        $harmony->addMiddleware(new Middlewares\AuraRouter($routerContainer))
             ->addMiddleware(new \App\Middlewares\AuthMiddleware())
             ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'))
             ->run();
 
-//    } catch(Exception $e) {
-//        //Emitter use the head() function of php to emit responses HTTP
-//        $emitter = new SapiEmitter();
-//        //Send a new empty response with code 400 because the request is not accepted
-//        $emitter->emit(new Response\EmptyResponse(400));
-    } catch(Error $e) {
+    } catch (Exception $e) {
+        $log->warning($e->getMessage());
+        //Emitter use the head() function of php to emit responses HTTP
+        $emitter = new SapiEmitter();
+        //Send a new empty response with code 400 because the request is not accepted
+        $emitter->emit(new Response\EmptyResponse(400));
+    } catch (Error $e) {
         //Emitter use the head() function of php to emit responses HTTP
         $emitter = new SapiEmitter();
         //Send a new empty response with code 500 because is a server error

@@ -129,6 +129,11 @@ $map->get('logout', '/logout', [
     'logout'
 ]);
 
+$map->get('contact', '/contact', [
+    'App\Controllers\ContactController',
+    'index'
+]);
+
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file

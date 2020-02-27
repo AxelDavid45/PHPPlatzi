@@ -134,6 +134,11 @@ $map->get('contact', '/contact', [
     'index'
 ]);
 
+$map->post('sendContactForm', '/contact/send', [
+    'App\Controllers\ContactController',
+    'sendForm'
+]);
+
 //Get the matcher from aura
 $matcher = $routerContainer->getMatcher();
 //Search the route and file

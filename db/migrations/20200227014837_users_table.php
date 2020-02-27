@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class JobTable extends AbstractMigration
+class UsersTable extends AbstractMigration
 {
     /**
      * Change Method.
@@ -31,16 +31,12 @@ class JobTable extends AbstractMigration
      */
     public function change()
     {
-        // Creating JobsTable
-        $table = $this->table('jobs');
-        $table->addColumn('title', 'string', ['null' => false])
-            ->addColumn('description', 'string', ['null' => false])
-            ->addColumn('image', 'string', ['null' => true])
-            ->addColumn('visible', 'boolean', ['null' => true])
-            ->addColumn('months', 'integer', ['null' => true])
+        $table = $this->table('users');
+        $table->addColumn('email', 'string')
+            ->addColumn('password', 'string')
             ->addColumn('created_at', 'datetime')
             ->addColumn('updated_at', 'datetime')
-            ->addColumn('deleted_at', 'datetime')
             ->create();
+
     }
 }

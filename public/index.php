@@ -39,7 +39,7 @@ $log->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::WARNIN
 $container = new DI\Container();
 
 //Create a capsule for ELOQUENT
-$capsule = new Capsule;
+$capsule = new Capsule();
 
 //Set up database connection stuffs
 $capsule->addConnection([

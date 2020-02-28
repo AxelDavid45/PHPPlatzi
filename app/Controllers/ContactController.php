@@ -4,7 +4,11 @@
 namespace App\Controllers;
 
 
+use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Diactoros\ServerRequest;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mime\Email;
 
 class ContactController extends BaseController
 {
@@ -15,9 +19,29 @@ class ContactController extends BaseController
 
     public function sendForm(ServerRequest $request)
     {
-        var_dump($request->getParsedBody());
-        die;
+        $requestData = $request->getParsedBody();
 
+        //Create the transport smtp
+        $transport = new EsmtpTransport(getenv('SMTP_HOST'), getenv('SMTP_PORT'));
+        $transport->setUsername(getenv('SMTP_USER'));
+        $transport->setPassword(getenv('SMTP_PASS'));
+
+        //The handler for the mail
+        $mailer = new Mailer($transport);
+
+        //The email
+        $email = new Email();
+        $email->from($requestData['email'])
+            ->to('you@example.com')
+            ->subject('A new person contacted you via your website')
+            ->text(
+                'Name:'. $requestData['name'].' Email: '.$requestData['email']
+            .' Message: '.$requestData['message']
+            );
+
+        $mailer->send($email);
+
+        return new RedirectResponse('/contact');
     }
 
 }

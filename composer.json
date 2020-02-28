@@ -23,6 +23,5 @@
         "symfony/mailer": "^5.0"
     },
     "require-dev": {
-        "laravel/homestead": "^10.1"
     }
 }

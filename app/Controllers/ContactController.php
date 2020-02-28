@@ -28,27 +28,6 @@ class ContactController extends BaseController
         $message->message = $requestData['message'];
         $message->save();
 
-
-        /*
-                //Create the transport smtp
-                $transport = new EsmtpTransport(getenv('SMTP_HOST'), getenv('SMTP_PORT'));
-                $transport->setUsername(getenv('SMTP_USER'));
-                $transport->setPassword(getenv('SMTP_PASS'));
-
-                //The handler for the mail
-                $mailer = new Mailer($transport);
-
-                //The email
-                $email = new Email();
-                $email->from($requestData['email'])
-                    ->to('you@example.com')
-                    ->subject('A new person contacted you via your website')
-                    ->text(
-                        'Name:'. $requestData['name'].' Email: '.$requestData['email']
-                    .' Message: '.$requestData['message']
-                    );
-
-                $mailer->send($email);*/
         return new RedirectResponse('/contact');
     }
 

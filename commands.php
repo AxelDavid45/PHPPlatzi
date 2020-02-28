@@ -2,6 +2,7 @@
 <?php
 require __DIR__.'/vendor/autoload.php';
 
+use App\Commands\CreateUserCommand;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Application;
 //Instance the dotenv
@@ -31,6 +32,6 @@ $capsule->bootEloquent();
 
 $application = new Application();
 
-$application->add(new \App\Commands\CreateUserCommand());
+$application->add(new CreateUserCommand());
 
 $application->run();

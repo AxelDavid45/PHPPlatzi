@@ -3,6 +3,8 @@
 //Load de autoload with all the classes
 require_once '../vendor/autoload.php';
 
+use App\Middlewares\AuthMiddleware;
+use Franzl\Middleware\Whoops\WhoopsMiddleware;
 use Illuminate\Database\Capsule\Manager as Capsule; //Eloquent
 //Router
 use Aura\Router\RouterContainer;
@@ -154,10 +156,10 @@ if (!$route) {
         $harmony = new Harmony($request, new Response());
         $harmony->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()));
         if (getenv('DEBUG') =='true') {
-            $harmony->addMiddleware(new \Franzl\Middleware\Whoops\WhoopsMiddleware);
+            $harmony->addMiddleware(new WhoopsMiddleware());
         }
         $harmony->addMiddleware(new Middlewares\AuraRouter($routerContainer))
-            ->addMiddleware(new \App\Middlewares\AuthMiddleware())
+            ->addMiddleware(new AuthMiddleware())
             ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'))
             ->run();
 

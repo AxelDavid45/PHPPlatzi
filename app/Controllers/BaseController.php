@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controllers;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\RedirectResponse;
@@ -14,9 +16,9 @@ class BaseController
      */
     public function __construct() {
         //Create the loader where the views are
-        $loader = new \Twig\Loader\FilesystemLoader('../views');
+        $loader = new FilesystemLoader('../views');
         //Create an environment for twig
-        $this->templateEngine = new \Twig\Environment($loader, [
+        $this->templateEngine = new Environment($loader, [
             'debug' => true,
             'cache' => false,
         ]);

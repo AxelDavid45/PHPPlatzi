@@ -4,6 +4,7 @@
 namespace App\Commands;
 
 
+use Exception;
 use Respect\Validation\Validator as v;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,7 +50,7 @@ class CreateUserCommand extends Command
 
             $saved = true;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $saved = false;
             $output->writeln($e->getMessage());
         }

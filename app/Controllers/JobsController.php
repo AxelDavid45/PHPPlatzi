@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Models\Job;
 use App\Services\JobService;
+use Exception;
 use Respect\Validation\Validator as v;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Diactoros\ServerRequest;
@@ -71,7 +72,7 @@ class JobsController extends BaseController
                     $responseMessage = $logo->getError();
                 }
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $responseMessage = $e->getMessage();
             }
 

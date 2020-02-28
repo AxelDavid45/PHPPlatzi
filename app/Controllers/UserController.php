@@ -3,6 +3,7 @@
 
 namespace App\Controllers;
 
+use Exception;
 use Respect\Validation\Validator as v;
 use App\Models\User;
 
@@ -34,7 +35,7 @@ class UserController extends BaseController
                 $user->save();
                 $message = true;
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $message = $e->getMessage();
             }
 
